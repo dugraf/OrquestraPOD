@@ -1,0 +1,490 @@
+/* =====================================================================
+   OrquestraPOD — tema Windows 2000 / 98 clássico (escrito à mão, sem libs).
+   Paleta e bordas 3D autênticas do "Luna clássico".
+   ===================================================================== */
+:root {
+  --face:    #c0c0c0;   /* cinza padrão das janelas */
+  --face-2:  #d4d0c8;
+  --hi:      #ffffff;   /* luz (borda superior/esquerda) */
+  --hi-2:    #dfdfdf;
+  --sh:      #808080;   /* sombra (borda inferior/direita) */
+  --sh-2:    #404040;
+  --title-a: #000080;   /* navy do title bar ativo */
+  --title-b: #1084d0;   /* azul claro do gradiente */
+  --title-inactive-a: #808080;
+  --title-inactive-b: #b5b5b5;
+  --desktop: #008080;   /* teal clássico do desktop */
+  --text:    #000000;
+  --link:    #000080;
+  --sel:     #000080;   /* seleção / destaque */
+  --good:    #008000;
+  --warn:    #808000;   /* oliva */
+  --bad:     #aa0000;
+  --accent:  #000080;
+}
+
+* { box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  font-family: Tahoma, "MS Sans Serif", Geneva, Verdana, sans-serif;
+  font-size: 12px;
+  color: var(--text);
+  background: var(--desktop);
+  /* padrão sutil de "tela" no desktop */
+  background-image:
+    linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+  background-size: 4px 4px;
+}
+
+/* ---- bevels reutilizáveis ----------------------------------------- */
+.outset {
+  border: 2px solid;
+  border-color: var(--hi) var(--sh-2) var(--sh-2) var(--hi);
+  box-shadow: inset 1px 1px 0 var(--hi-2), inset -1px -1px 0 var(--sh);
+}
+.inset, .sunken {
+  background: #ffffff;
+  border: 2px solid;
+  border-color: var(--sh) var(--hi) var(--hi) var(--sh);
+  box-shadow: inset 1px 1px 0 var(--sh-2), inset -1px -1px 0 var(--hi-2);
+}
+
+/* =====================================================================
+   Desktop + grade de janelas
+   ===================================================================== */
+.desktop {
+  min-height: 100vh;
+  padding: 14px 14px 46px;            /* espaço p/ taskbar fixa */
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ---- janela estilo Win2000 ---------------------------------------- */
+.window {
+  background: var(--face);
+  border: 2px solid;
+  border-color: var(--hi) var(--sh-2) var(--sh-2) var(--hi);
+  box-shadow: inset 1px 1px 0 var(--hi-2), inset -1px -1px 0 var(--sh),
+              2px 2px 0 rgba(0,0,0,.35);
+  padding: 3px;
+}
+.title-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 22px;
+  padding: 0 3px 0 4px;
+  color: #fff;
+  font-weight: bold;
+  background: linear-gradient(90deg, var(--title-a), var(--title-b));
+  user-select: none;
+}
+.title-bar .title-text {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; letter-spacing: .2px;
+  text-shadow: 1px 1px 0 rgba(0,0,0,.4);
+  overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+}
+.title-bar .ico {
+  width: 16px; height: 16px; display: inline-block; text-align: center;
+  line-height: 16px; font-size: 12px;
+}
+.title-controls { display: flex; gap: 2px; }
+.title-controls button {
+  width: 17px; height: 15px; min-width: 0; padding: 0;
+  font-family: "Marlett", Tahoma, sans-serif;
+  font-size: 10px; font-weight: bold; line-height: 11px;
+  background: var(--face);
+  color: #000;
+  border: 2px solid;
+  border-color: var(--hi) var(--sh-2) var(--sh-2) var(--hi);
+  box-shadow: inset 1px 1px 0 var(--hi-2), inset -1px -1px 0 var(--sh);
+  cursor: default;
+}
+.title-controls button:active { filter: none; }
+.window-body { padding: 12px 12px 14px; }
+.window h2 {
+  margin: 0 0 10px; font-size: 12px; font-weight: bold; color: #000;
+}
+.window h2.mt { margin-top: 16px; }
+
+/* =====================================================================
+   Cabeçalho principal (banner) + KPIs
+   ===================================================================== */
+.app-banner .window-body {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap;
+}
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand .logo {
+  width: 40px; height: 40px; flex: none;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; color: #fff;
+  background: linear-gradient(135deg, var(--title-a), var(--title-b));
+  border: 2px solid; border-color: var(--hi) var(--sh-2) var(--sh-2) var(--hi);
+}
+.brand h1 { margin: 0; font-size: 16px; color: #000; }
+.subtitle { margin: 2px 0 0; color: #303030; font-size: 11px; }
+.sched-badge {
+  background: var(--face); color: var(--title-a); font-weight: bold;
+  padding: 5px 12px; font-size: 11px;
+  border: 2px solid; border-color: var(--sh) var(--hi) var(--hi) var(--sh);
+}
+
+.kpis {
+  display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px;
+  margin-top: 12px; width: 100%;
+}
+.kpi {
+  background: #fff; padding: 8px 6px; text-align: center;
+  border: 2px solid; border-color: var(--sh) var(--hi) var(--hi) var(--sh);
+}
+.kpi .num { font-size: 22px; font-weight: bold; color: #000; font-variant-numeric: tabular-nums; }
+.kpi .lbl { color: #404040; font-size: 10px; margin-top: 2px; text-transform: uppercase; letter-spacing: .03em; }
+.kpi.good .num { color: var(--good); }
+.kpi.warn .num { color: var(--warn); }
+.kpi.bad  .num { color: var(--bad); }
+.kpi.accent .num { color: var(--accent); }
+
+/* =====================================================================
+   Layout em grade das janelas de conteúdo
+   ===================================================================== */
+.grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+}
+
+/* ---- ilustração do cluster (banner pixel-art) --------------------- */
+.cluster-art {
+  background: #0a3d3d;
+  border: 2px solid; border-color: var(--sh) var(--hi) var(--hi) var(--sh);
+  padding: 8px;
+  display: flex; align-items: center; justify-content: center;
+}
+.cluster-art img {
+  display: block; width: 100%; max-width: 660px; height: auto;
+  image-rendering: pixelated;
+}
+
+/* ---- pipeline produtor -> fila -> escalonador --------------------- */
+.pipeline-flow { display: flex; align-items: stretch; gap: 8px; }
+.stage {
+  flex: 1; background: var(--face); padding: 10px; text-align: center;
+  min-height: 64px;
+  border: 2px solid; border-color: var(--hi) var(--sh-2) var(--sh-2) var(--hi);
+}
+.stage span { font-weight: bold; display: block; font-size: 12px; }
+.stage small { color: #404040; }
+.arrow { display: flex; align-items: center; color: var(--title-a); font-size: 18px; font-weight: bold; }
+.queue-stage { flex: 1.6; }
+.queue {
+  display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; justify-content: center;
+  background: #fff; padding: 6px; min-height: 30px;
+  border: 2px solid; border-color: var(--sh) var(--hi) var(--hi) var(--sh);
+}
+.qchip {
+  background: var(--face); border: 1px solid var(--sh-2); color: var(--title-a);
+  padding: 1px 6px; font-size: 11px; font-weight: bold;
+}
+
+/* ---- log de eventos ----------------------------------------------- */
+.log {
+  list-style: none; margin: 0; padding: 4px; max-height: 330px; overflow-y: auto;
+  font-size: 11px; background: #fff;
+  border: 2px solid; border-color: var(--sh) var(--hi) var(--hi) var(--sh);
+}
+.log li { padding: 2px 4px; color: #303030; font-family: "Lucida Console", "Courier New", monospace; }
+.log li:first-child { color: #000; font-weight: bold; background: #e8e8e8; }
+
+/* =====================================================================
+   Workers
+   ===================================================================== */
+.workers { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; }
+.worker {
+  background: var(--face); padding: 10px;
+  border: 2px solid; border-color: var(--hi) var(--sh-2) var(--sh-2) var(--hi);
+}
+.worker-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;
+  border-bottom: 1px solid var(--sh); padding-bottom: 6px; }
+.worker-head .wname { font-weight: bold; font-size: 13px; }
+.worker-head .wlat {
+  font-size: 10px; color: var(--title-a); background: #fff; font-weight: bold;
+  padding: 1px 6px; border: 1px solid var(--sh);
+}
+.bar { margin: 7px 0; }
+.bar .bar-top { display: flex; justify-content: space-between; font-size: 11px; color: #303030; margin-bottom: 3px; }
+/* trilho sunken com blocos segmentados (estilo progress Win2000) */
+.bar .track {
+  height: 14px; background: #fff; padding: 2px; overflow: hidden;
+  border: 2px solid; border-color: var(--sh) var(--hi) var(--hi) var(--sh);
+}
+.bar .fill {
+  height: 100%; transition: width .4s steps(12);
+  background-color: var(--good);
+  /* segmentos verticais: bloco colorido + 2px de espaço */
+  background-image: repeating-linear-gradient(90deg,
+      transparent 0, transparent 0,
+      #ffffff 0, #ffffff 0);
+}
+.fill.cpu  { background-color: #000080; }
+.fill.mem  { background-color: #008080; }
+.fill.disk { background-color: #808000; }
+.fill.hot  { background-color: #aa0000 !important; }
+/* segmentação aplicada por cima de qualquer cor */
+.bar .fill {
+  background-image: repeating-linear-gradient(90deg,
+      rgba(255,255,255,0) 0px, rgba(255,255,255,0) 6px,
+      var(--face) 6px, var(--face) 8px);
+}
+.wpods { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 10px; min-height: 22px; }
+.podchip {
+  color: #fff; padding: 1px 7px; font-size: 11px; font-weight: bold;
+  border: 1px solid rgba(0,0,0,.5);
+  text-shadow: 1px 1px 0 rgba(0,0,0,.4);
+}
+.wpods-empty { color: #606060; font-size: 11px; font-style: italic; }
+
+/* =====================================================================
+   Gráficos
+   ===================================================================== */
+.charts { display: grid; grid-template-columns: 1.4fr 1fr; gap: 14px; }
+.chart-box {
+  background: #fff; padding: 10px; min-height: 250px;
+  border: 2px solid; border-color: var(--sh) var(--hi) var(--hi) var(--sh);
+}
+
+/* =====================================================================
+   Comparação
+   ===================================================================== */
+.compare-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+
+button {
+  font-family: Tahoma, "MS Sans Serif", sans-serif; font-size: 12px;
+  background: var(--face); color: #000; font-weight: normal;
+  padding: 5px 14px; min-width: 75px; cursor: default;
+  border: 2px solid; border-color: var(--hi) var(--sh-2) var(--sh-2) var(--hi);
+  box-shadow: inset 1px 1px 0 var(--hi-2), inset -1px -1px 0 var(--sh);
+}
+button:focus { outline: 1px dotted #000; outline-offset: -4px; }
+button:active {
+  border-color: var(--sh-2) var(--hi) var(--hi) var(--sh-2);
+  box-shadow: inset 1px 1px 0 var(--sh), inset -1px -1px 0 var(--hi-2);
+  padding: 6px 13px 4px 15px;        /* leve "afundar" do texto */
+}
+button:disabled { color: var(--sh); text-shadow: 1px 1px 0 var(--hi); cursor: wait; }
+
+.muted { color: #505050; }
+.compare-result { margin-top: 12px; }
+.cmp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.cmp-card {
+  background: var(--face); padding: 12px;
+  border: 2px solid; border-color: var(--hi) var(--sh-2) var(--sh-2) var(--hi);
+}
+.cmp-card.win { box-shadow: 0 0 0 2px var(--good); }
+.cmp-card h3 { margin: 0 0 10px; font-size: 12px; }
+.cmp-card .tag-win { color: var(--good); font-size: 10px; font-weight: bold; }
+.cmp-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid var(--sh); font-size: 12px; }
+.cmp-row b { font-variant-numeric: tabular-nums; }
+.cmp-note { margin-top: 12px; font-size: 12px; color: #303030; line-height: 1.5; }
+
+/* =====================================================================
+   Rodapé "Sobre"
+   ===================================================================== */
+.foot { text-align: center; color: #003030; font-size: 11px; padding: 4px 0 0; }
+
+/* =====================================================================
+   Taskbar fixa (Start + janela ativa + relógio)
+   ===================================================================== */
+.taskbar {
+  position: fixed; left: 0; right: 0; bottom: 0; height: 32px; z-index: 100;
+  display: flex; align-items: center; gap: 6px; padding: 2px 4px;
+  background: var(--face);
+  border-top: 2px solid var(--hi);
+  box-shadow: inset 0 1px 0 var(--hi-2);
+}
+.start-btn {
+  display: flex; align-items: center; gap: 5px; font-weight: bold;
+  padding: 3px 10px 3px 6px; min-width: 0;
+}
+.start-btn .flag {
+  width: 16px; height: 14px; display: inline-block; position: relative;
+  background:
+    linear-gradient(135deg, #ff0000 0 50%, #00a000 50% 100%);
+}
+.start-btn .flag::before {
+  content: ""; position: absolute; inset: 0;
+  background:
+    linear-gradient(135deg, transparent 0 50%, #0000ff 50% 100%);
+  clip-path: polygon(0 0, 50% 0, 0 50%);
+}
+.task-btn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 3px 12px 3px 8px; min-width: 150px; justify-content: flex-start;
+  /* botão "pressionado" = janela ativa */
+  border-color: var(--sh-2) var(--hi) var(--hi) var(--sh-2);
+  box-shadow: inset 1px 1px 0 var(--sh), inset -1px -1px 0 var(--hi-2);
+  font-weight: bold;
+}
+.taskbar .spacer { flex: 1; }
+.tray {
+  display: flex; align-items: center; gap: 8px; height: 24px; padding: 0 10px;
+  background: var(--face); font-size: 11px;
+  border: 2px solid; border-color: var(--sh) var(--hi) var(--hi) var(--sh);
+  box-shadow: inset 1px 1px 0 var(--sh-2);
+}
+.tray .clock { font-variant-numeric: tabular-nums; min-width: 48px; text-align: center; }
+.tray .tray-ico { font-size: 12px; line-height: 1; }
+
+.theme-toggle { height: 26px; min-width: 0; padding: 2px 12px; }
+
+/* =====================================================================
+   Responsivo
+   ===================================================================== */
+@media (max-width: 980px) {
+  .grid { grid-template-columns: 1fr; }
+  .kpis { grid-template-columns: repeat(3, 1fr); }
+  .charts, .cmp-grid { grid-template-columns: 1fr; }
+  .task-btn { min-width: 0; }
+}
+
+/* =====================================================================
+   TEMA ESCURO (anterior) — ativado por <body class="theme-modern">.
+   Reaproveita a mesma estrutura HTML, sobrescrevendo o visual Win2000
+   pelo dashboard dark/moderno original.
+   ===================================================================== */
+body.theme-modern {
+  --bg: #0f172a; --panel: #1e293b; --panel-2: #273449; --border: #334155;
+  --text: #e2e8f0; --muted: #94a3b8; --accent: #38bdf8;
+  --good: #22c55e; --warn: #f59e0b; --bad: #ef4444;
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  font-size: 14px; color: var(--text);
+  background: radial-gradient(1200px 600px at 80% -10%, #15233f 0%, #0f172a 60%);
+  background-size: auto;
+}
+body.theme-modern .desktop { padding: 0 0 56px; gap: 18px; }
+
+/* janelas -> painéis arredondados */
+body.theme-modern .window {
+  background: var(--panel); border: 1px solid var(--border); border-radius: 14px;
+  box-shadow: none; padding: 0; margin: 0 28px;
+}
+body.theme-modern .grid { margin: 0 28px; }
+body.theme-modern .grid .window { margin: 0; }
+body.theme-modern .title-bar {
+  background: transparent; color: var(--text); height: auto;
+  padding: 16px 20px 0; font-size: 16px; text-shadow: none;
+}
+body.theme-modern .title-controls { display: none; }
+body.theme-modern .title-bar .ico { color: var(--accent); }
+body.theme-modern .window-body { padding: 12px 20px 18px; }
+body.theme-modern .window h2 { color: var(--text); }
+
+/* banner / marca */
+body.theme-modern .brand .logo {
+  background: none; border: none; color: var(--accent); font-size: 34px;
+  filter: drop-shadow(0 0 10px rgba(56,189,248,.5));
+}
+body.theme-modern .brand h1 { color: var(--text); font-size: 20px; }
+body.theme-modern .subtitle { color: var(--muted); }
+body.theme-modern .sched-badge {
+  background: var(--panel-2); border: 1px solid var(--border);
+  border-radius: 999px; color: var(--accent);
+}
+
+/* KPIs */
+body.theme-modern .kpi {
+  background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
+}
+body.theme-modern .kpi .num { color: var(--text); }
+body.theme-modern .kpi .lbl { color: var(--muted); }
+
+/* ilustração do cluster */
+body.theme-modern .cluster-art {
+  background: #0a3d3d; border: 1px solid var(--border); border-radius: 12px;
+}
+
+/* pipeline / fila */
+body.theme-modern .stage {
+  background: var(--panel-2); border: 1px solid var(--border); border-radius: 10px;
+}
+body.theme-modern .stage small { color: var(--muted); }
+body.theme-modern .arrow { color: var(--accent); }
+body.theme-modern .queue { background: transparent; border: none; box-shadow: none; padding: 0; }
+body.theme-modern .qchip {
+  background: #0b1220; border: 1px solid var(--border); color: var(--accent); border-radius: 6px;
+}
+
+/* log */
+body.theme-modern .log { background: transparent; border: none; box-shadow: none; }
+body.theme-modern .log li { border-bottom: 1px solid #2a3a52; color: var(--muted); }
+body.theme-modern .log li:first-child { background: transparent; color: var(--text); }
+
+/* workers */
+body.theme-modern .worker {
+  background: var(--panel-2); border: 1px solid var(--border); border-radius: 12px;
+}
+body.theme-modern .worker-head { border-bottom: none; }
+body.theme-modern .worker-head .wlat {
+  background: #0b1220; border: none; border-radius: 999px; color: var(--accent);
+}
+body.theme-modern .bar .bar-top { color: var(--muted); }
+body.theme-modern .bar .track {
+  height: 9px; background: #0b1220; border: none; box-shadow: none;
+  border-radius: 999px; padding: 0;
+}
+body.theme-modern .bar .fill { border-radius: 999px; background-image: none; transition: width .5s ease; }
+body.theme-modern .fill.cpu  { background: linear-gradient(90deg, #38bdf8, #0ea5e9); }
+body.theme-modern .fill.mem  { background: linear-gradient(90deg, #a855f7, #7c3aed); }
+body.theme-modern .fill.disk { background: linear-gradient(90deg, #f59e0b, #d97706); }
+body.theme-modern .fill.hot  { background: linear-gradient(90deg, #ef4444, #b91c1c) !important; }
+body.theme-modern .podchip { border-radius: 6px; border: none; text-shadow: none; }
+body.theme-modern .wpods-empty { color: var(--muted); }
+
+/* gráficos */
+body.theme-modern .chart-box {
+  background: var(--panel-2); border: 1px solid var(--border); border-radius: 12px;
+}
+
+/* botões */
+body.theme-modern button {
+  background: var(--accent); color: #00263a; border: none; border-radius: 9px;
+  box-shadow: none; font-weight: 700; padding: 10px 16px; min-width: 0;
+}
+body.theme-modern button:hover { filter: brightness(1.1); }
+body.theme-modern button:active { padding: 10px 16px; box-shadow: none; border: none; filter: brightness(.95); }
+body.theme-modern button:disabled { opacity: .6; color: #00263a; text-shadow: none; }
+
+/* comparação */
+body.theme-modern .cmp-card {
+  background: var(--panel-2); border: 1px solid var(--border); border-radius: 12px;
+}
+body.theme-modern .cmp-card.win { border-color: var(--good); box-shadow: 0 0 0 1px var(--good) inset; }
+body.theme-modern .cmp-row { border-bottom: 1px solid #2a3a52; }
+body.theme-modern .cmp-note { color: var(--muted); }
+body.theme-modern .muted { color: var(--muted); }
+
+/* rodapé */
+body.theme-modern .foot { color: var(--muted); }
+
+/* taskbar dark */
+body.theme-modern .taskbar {
+  height: 36px; background: rgba(15,23,42,.85); border-top: 1px solid var(--border);
+  box-shadow: none; backdrop-filter: blur(6px);
+}
+body.theme-modern .start-btn,
+body.theme-modern .task-btn,
+body.theme-modern .theme-toggle {
+  background: var(--panel-2); color: var(--text); border: 1px solid var(--border);
+  border-radius: 8px; box-shadow: none; font-weight: 600;
+}
+body.theme-modern .theme-toggle:hover,
+body.theme-modern .task-btn:hover { filter: brightness(1.15); }
+body.theme-modern .start-btn .flag { display: none; }
+body.theme-modern .tray {
+  background: var(--panel-2); border: 1px solid var(--border); border-radius: 8px;
+  box-shadow: none; color: var(--text);
+}

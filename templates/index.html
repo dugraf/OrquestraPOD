@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OrquestraPOD · Orquestrador de PODs</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="{{ url_for('static', filename='vendor/chart.umd.min.js') }}"></script>
+</head>
+<body>
+  <div class="desktop">
+
+    <!-- ============ Janela: cabeçalho / KPIs ============ -->
+    <section class="window app-banner">
+      <div class="title-bar">
+        <span class="title-text"><span class="ico">⎈</span> OrquestraPOD — Orquestrador de PODs</span>
+        <span class="title-controls">
+          <button type="button" tabindex="-1" aria-hidden="true">_</button>
+          <button type="button" tabindex="-1" aria-hidden="true">□</button>
+          <button type="button" tabindex="-1" aria-hidden="true">✕</button>
+        </span>
+      </div>
+      <div class="window-body">
+        <div class="brand">
+          <span class="logo">⎈</span>
+          <div>
+            <h1>OrquestraPOD — Orquestrador de PODs</h1>
+            <p class="subtitle">Master + Workers · escalonamento multi-métrica (CPU · Memória · Disco · Latência)</p>
+          </div>
+        </div>
+        <div class="sched-badge" id="schedBadge">escalonador</div>
+        <section class="kpis" id="kpis"></section>
+      </div>
+    </section>
+
+    <main class="grid">
+      <!-- ============ (1,1) Janela: Pipeline ============ -->
+      <section class="window">
+        <div class="title-bar">
+          <span class="title-text"><span class="ico">🔀</span> Pipeline — Produtor → Fila → Escalonador</span>
+          <span class="title-controls">
+            <button type="button" tabindex="-1" aria-hidden="true">_</button>
+            <button type="button" tabindex="-1" aria-hidden="true">□</button>
+            <button type="button" tabindex="-1" aria-hidden="true">✕</button>
+          </span>
+        </div>
+        <div class="window-body">
+          <div class="pipeline-flow">
+            <div class="stage"><span>👷 Produtor</span><small>cria PODs</small></div>
+            <div class="arrow">→</div>
+            <div class="stage queue-stage">
+              <span>📋 Fila</span>
+              <div class="queue" id="queue"></div>
+            </div>
+            <div class="arrow">→</div>
+            <div class="stage"><span>🧠 Escalonador</span><small>consumidor</small></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ (1,2) Janela: Workers ============ -->
+      <section class="window">
+        <div class="title-bar">
+          <span class="title-text"><span class="ico">🗄</span> Nodos Workers</span>
+          <span class="title-controls">
+            <button type="button" tabindex="-1" aria-hidden="true">_</button>
+            <button type="button" tabindex="-1" aria-hidden="true">□</button>
+            <button type="button" tabindex="-1" aria-hidden="true">✕</button>
+          </span>
+        </div>
+        <div class="window-body">
+          <div class="workers" id="workers"></div>
+        </div>
+      </section>
+
+      <!-- ============ (2,1) Janela: Eventos do cluster ============ -->
+      <section class="window">
+        <div class="title-bar">
+          <span class="title-text"><span class="ico">📜</span> Eventos do cluster</span>
+          <span class="title-controls">
+            <button type="button" tabindex="-1" aria-hidden="true">_</button>
+            <button type="button" tabindex="-1" aria-hidden="true">□</button>
+            <button type="button" tabindex="-1" aria-hidden="true">✕</button>
+          </span>
+        </div>
+        <div class="window-body">
+          <ul class="log" id="log"></ul>
+        </div>
+      </section>
+
+      <!-- ============ (2,2) Janela: Cluster (ilustração) ============ -->
+      <section class="window">
+        <div class="title-bar">
+          <span class="title-text"><span class="ico">🖥</span> Cluster — Topologia (Master + Workers)</span>
+          <span class="title-controls">
+            <button type="button" tabindex="-1" aria-hidden="true">_</button>
+            <button type="button" tabindex="-1" aria-hidden="true">□</button>
+            <button type="button" tabindex="-1" aria-hidden="true">✕</button>
+          </span>
+        </div>
+        <div class="window-body">
+          <div class="cluster-art">
+            <img src="{{ url_for('static', filename='cluster.svg') }}"
+                 alt="Sala de servidores: nodo Master conectado aos Workers worker-cpu, worker-disk e worker-edge">
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ============ Janela: Estatísticas ============ -->
+    <section class="window">
+      <div class="title-bar">
+        <span class="title-text"><span class="ico">📊</span> Estatísticas</span>
+        <span class="title-controls">
+          <button type="button" tabindex="-1" aria-hidden="true">_</button>
+          <button type="button" tabindex="-1" aria-hidden="true">□</button>
+          <button type="button" tabindex="-1" aria-hidden="true">✕</button>
+        </span>
+      </div>
+      <div class="window-body">
+        <div class="charts">
+          <div class="chart-box"><canvas id="chartUtil"></canvas></div>
+          <div class="chart-box"><canvas id="chartPods"></canvas></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Janela: Comparação ============ -->
+    <section class="window">
+      <div class="title-bar">
+        <span class="title-text"><span class="ico">⚖</span> Comparação com o escalonador padrão do Kubernetes</span>
+        <span class="title-controls">
+          <button type="button" tabindex="-1" aria-hidden="true">_</button>
+          <button type="button" tabindex="-1" aria-hidden="true">□</button>
+          <button type="button" tabindex="-1" aria-hidden="true">✕</button>
+        </span>
+      </div>
+      <div class="window-body">
+        <div class="compare-head">
+          <h2>Proposto (4 métricas) × Padrão K8s (2 métricas)</h2>
+          <button id="btnCompare">Comparar proposto × padrão</button>
+        </div>
+        <div id="compareResult" class="compare-result muted">
+          Clique no botão para rodar a mesma carga de PODs nos dois escalonadores.
+        </div>
+      </div>
+    </section>
+
+    <footer class="foot">
+      Trabalho I — Laboratório de Sistemas Operacionais · simulação em Python (threads + produtor/consumidor)
+    </footer>
+  </div>
+
+  <!-- ============ Taskbar ============ -->
+  <div class="taskbar">
+    <button class="start-btn" type="button" tabindex="-1"><span class="flag"></span>Iniciar</button>
+    <button class="task-btn" type="button" tabindex="-1"><span class="ico">⎈</span> orquestrapod.exe</button>
+    <span class="spacer"></span>
+    <button class="theme-toggle" id="themeToggle" type="button" title="Alternar tema visual">🌙 Tema escuro</button>
+    <span class="tray">
+      <span class="tray-ico" title="cluster em execução">🟢</span>
+      <span class="clock" id="clock">--:--</span>
+    </span>
+  </div>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
