@@ -1,9 +1,10 @@
 # OrquestraPOD — Orquestrador de PODs com escalonamento multi-métrica
 
 Trabalho I — **Laboratório de Sistemas Operacionais** (Unisinos, 2026/1).
+
 Integrante: Eduardo Rodrigues Graf
 
-Vídeo de apresentação: [assistir no Google Drive](https://drive.google.com/file/d/1a8Ku3ZxgdmmP1UzLi9-sFJk5-NV9iOUX/view?usp=drive_link) (ou o arquivo local [`OrquestraPOD.mp4`](OrquestraPOD.mp4))
+Vídeo de apresentação: [assistir no Google Drive](https://drive.google.com/file/d/1a8Ku3ZxgdmmP1UzLi9-sFJk5-NV9iOUX/view?usp=drive_link)
 
 Simulação, em Python, de um orquestrador de PODs no estilo **Kubernetes**: um nó **Master**
 com escalonador, **três nós Workers** heterogêneos e uma carga de **mais de uma dezena de PODs**.
